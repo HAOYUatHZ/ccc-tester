@@ -1,5 +1,7 @@
 FROM scrolltech/l2geth:ccc-0.0.1
 
+ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib/
+
 RUN mkdir -p /l2geth/keystore
 
 COPY password /l2geth/
