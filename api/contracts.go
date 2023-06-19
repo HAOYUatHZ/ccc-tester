@@ -43,6 +43,8 @@ type jsonrpcMessage struct {
 const TRACEDATA_DIR_PREFIX = "./tracedata/"
 
 func storeBlockResultsForTxs(ctx context.Context, client *ethclient.Client, path, file string, txs ...*types.Transaction) error {
+	return nil
+
 	numberList, err := getTxsBlockNumbers(ctx, client, file, txs...)
 	if err != nil {
 		return err
