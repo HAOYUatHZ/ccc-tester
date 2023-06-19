@@ -3,7 +3,7 @@ package api
 import (
 	"context"
 	"encoding/json"
-	"errors"
+	// "errors"
 	"fmt"
 	"math"
 	"math/big"
@@ -43,13 +43,12 @@ type jsonrpcMessage struct {
 const TRACEDATA_DIR_PREFIX = "./tracedata/"
 
 func storeBlockResultsForTxs(ctx context.Context, client *ethclient.Client, path, file string, txs ...*types.Transaction) error {
-	return nil
-
 	numberList, err := getTxsBlockNumbers(ctx, client, file, txs...)
 	if err != nil {
 		return err
 	}
 
+	return nil
 	return storeBlockResultsForBlocks(ctx, client, path, file, numberList)
 }
 
@@ -65,7 +64,7 @@ func getTxsBlockNumbers(ctx context.Context, client *ethclient.Client, file stri
 			return nil, err
 		}
 		if receipt.Status != types.ReceiptStatusSuccessful {
-			return nil, errors.New("receipt status is fail")
+			return nil, fmt.Errorf("receipt status is fail. receipt.BlockNumber.Uint64(): %d", receipt.BlockNumber.Uint64())
 		}
 		if preNumber != nil && preNumber.Uint64() == receipt.BlockNumber.Uint64() {
 			continue
