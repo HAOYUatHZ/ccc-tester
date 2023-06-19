@@ -1,4 +1,5 @@
-FROM scrolltech/l2geth:ccc-0.0.1
+# FROM scrolltech/l2geth:ccc-0.0.1
+FROM scrolltech/l2geth:scroll-v3.3.1
 
 ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib/
 

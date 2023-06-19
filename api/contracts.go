@@ -48,7 +48,7 @@ func storeBlockResultsForTxs(ctx context.Context, client *ethclient.Client, path
 		return err
 	}
 
-	return nil
+	// return nil
 	return storeBlockResultsForBlocks(ctx, client, path, file, numberList)
 }
 
@@ -445,7 +445,7 @@ func NewUniswapv2(ctx context.Context, client *ethclient.Client, root, auth *bin
 	}
 
 	// swap weth => btc
-	swapVal := utils.Ether
+	swapVal := big.NewInt(1e15) // 0.001 utils.Ether
 	times:=100
 	var txs = make([]*types.Transaction, 0, times)
 	for i := 0; i < times; i++ {
