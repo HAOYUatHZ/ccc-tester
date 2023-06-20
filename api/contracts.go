@@ -48,7 +48,6 @@ func storeBlockResultsForTxs(ctx context.Context, client *ethclient.Client, path
 		return err
 	}
 
-	// return nil
 	return storeBlockResultsForBlocks(ctx, client, path, file, numberList)
 }
 
@@ -349,6 +348,9 @@ func NewDao(ctx context.Context, client *ethclient.Client, root, auth *bind.Tran
 }
 
 func NewUniswapv2(ctx context.Context, client *ethclient.Client, root, auth *bind.TransactOpts) error {
+	root.GasLimit = 5000000
+	auth.GasLimit = 5000000
+
 	wethAddr, tx, wethToken, err := weth9.DeployWETH9(root, client)
 	if err != nil {
 		return err
@@ -447,7 +449,6 @@ func NewUniswapv2(ctx context.Context, client *ethclient.Client, root, auth *bin
 	// swap weth => btc
 	swapVal := big.NewInt(1e15) // 0.001 utils.Ether
 	times:=100
-	auth.GasLimit = 5000000
 	var txs = make([]*types.Transaction, 0, times)
 	for i := 0; i < times; i++ {
 		tx, err = rToken.SwapExactTokensForTokens(
@@ -465,5 +466,17 @@ func NewUniswapv2(ctx context.Context, client *ethclient.Client, root, auth *bin
 		txs = append(txs, tx)
 	}
 
-	return storeBlockResultsForTxs(ctx, client, path, "router-swapExactTokensForTokens", txs...)
+	for i, tx := range txs {
+		receipt, err := bind.WaitMined(ctx, client, tx)
+		if err != nil {
+			return err
+		}
+		if receipt.Status != types.ReceiptStatusSuccessful {
+			log.Error("tx status is not right", "index", i, "txHash", tx.Hash().String())
+		}
+	}
+
+	return nil
+
+	// return storeBlockResultsForTxs(ctx, client, path, "router-swapExactTokensForTokens", txs...)
 }
