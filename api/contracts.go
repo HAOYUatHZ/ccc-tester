@@ -348,8 +348,8 @@ func NewDao(ctx context.Context, client *ethclient.Client, root, auth *bind.Tran
 }
 
 func NewUniswapv2(ctx context.Context, client *ethclient.Client, root, auth *bind.TransactOpts) error {
-	root.GasLimit = 4000000
-	auth.GasLimit = 4000000
+	root.GasLimit = 5000000
+	root.GasLimit = 5000000
 
 	wethAddr, tx, wethToken, err := weth9.DeployWETH9(root, client)
 	if err != nil {
@@ -449,6 +449,7 @@ func NewUniswapv2(ctx context.Context, client *ethclient.Client, root, auth *bin
 	// swap weth => btc
 	swapVal := big.NewInt(1e15) // 0.001 utils.Ether
 	times:=100
+	auth.GasLimit = 104746
 	var txs = make([]*types.Transaction, 0, times)
 	for i := 0; i < times; i++ {
 		tx, err = rToken.SwapExactTokensForTokens(
