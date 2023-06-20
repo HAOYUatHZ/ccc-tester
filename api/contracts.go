@@ -449,7 +449,7 @@ func NewUniswapv2(ctx context.Context, client *ethclient.Client, root, auth *bin
 	// swap weth => btc
 	swapVal := big.NewInt(1e15) // 0.001 utils.Ether
 	times:=100
-	auth.GasLimit = 104746
+	auth.GasLimit = 1000000
 	var txs = make([]*types.Transaction, 0, times)
 	for i := 0; i < times; i++ {
 		tx, err = rToken.SwapExactTokensForTokens(
