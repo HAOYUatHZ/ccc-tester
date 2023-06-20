@@ -476,7 +476,6 @@ func NewUniswapv2(ctx context.Context, client *ethclient.Client, root, auth *bin
 			log.Error("tx status is not right", "index", i, "txHash", tx.Hash().String())
 		}
 	}
-
 	return nil
 
 	// return storeBlockResultsForTxs(ctx, client, path, "router-swapExactTokensForTokens", txs...)
