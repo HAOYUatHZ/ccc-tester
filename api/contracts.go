@@ -467,16 +467,16 @@ func NewUniswapv2(ctx context.Context, client *ethclient.Client, root, auth *bin
 		txs = append(txs, tx)
 	}
 
-	for i, tx := range txs {
-		receipt, err := bind.WaitMined(ctx, client, tx)
-		if err != nil {
-			return err
-		}
-		if receipt.Status != types.ReceiptStatusSuccessful {
-			log.Error("tx status is not right", "index", i, "txHash", tx.Hash().String())
-		}
-	}
-	return nil
+	// for i, tx := range txs {
+	// 	receipt, err := bind.WaitMined(ctx, client, tx)
+	// 	if err != nil {
+	// 		return err
+	// 	}
+	// 	if receipt.Status != types.ReceiptStatusSuccessful {
+	// 		log.Error("tx status is not right", "index", i, "txHash", tx.Hash().String())
+	// 	}
+	// }
+	// return nil
 
-	// return storeBlockResultsForTxs(ctx, client, path, "router-swapExactTokensForTokens", txs...)
+	return storeBlockResultsForTxs(ctx, client, path, "router-swapExactTokensForTokens", txs...)
 }
