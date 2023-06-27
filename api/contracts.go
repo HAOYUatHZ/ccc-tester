@@ -349,7 +349,7 @@ func NewDao(ctx context.Context, client *ethclient.Client, root, auth *bind.Tran
 
 func NewUniswapv2(ctx context.Context, client *ethclient.Client, root, auth *bind.TransactOpts) error {
 	root.GasLimit = 5000000
-	root.GasLimit = 5000000
+	auth.GasLimit = 5000000
 
 	wethAddr, tx, wethToken, err := weth9.DeployWETH9(root, client)
 	if err != nil {
