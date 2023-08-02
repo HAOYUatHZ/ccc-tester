@@ -1,8 +1,8 @@
-FROM scrolltech/l2geth:ccc-0.0.6
+FROM scrolltech/l2geth:new_hash-v1.0
 # FROM scrolltech/l2geth:scroll-v3.3.1
 
 ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib/
-ENV RUST_LOG="info"
+ENV RUST_LOG="debug"
 
 RUN mkdir -p /l2geth/keystore
 
