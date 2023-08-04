@@ -1,4 +1,4 @@
-FROM scrolltech/l2geth:scroll-v4.3.17
+FROM scrolltech/l2geth:test
 # FROM scrolltech/l2geth:scroll-v3.3.1
 
 ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib/
