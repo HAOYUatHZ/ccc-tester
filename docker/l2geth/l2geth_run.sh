@@ -16,3 +16,4 @@ exec geth --mine --datadir "." --unlock 0 --password "./password" --allow-insecu
   --ws --ws.addr "0.0.0.0" --ws.port 8546 --ws.api "eth,scroll,net,web3,debug" \
   --gcmode archive \
   --trace.mptwitness 2
+  --ccc
