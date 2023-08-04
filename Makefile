@@ -14,4 +14,4 @@ start_docker:
 	docker run --rm -p 8545:8545 -p 8546:8546 trace-dumper/l2geth
 
 docker: ## Build integration-test image
-	docker build --no-cache -t trace-dumper/l2geth:latest ./docker/l2geth/.
+	docker build --platform linux/x86_64 --no-cache -t trace-dumper/l2geth:latest ./docker/l2geth/.
