@@ -42,12 +42,28 @@ type jsonrpcMessage struct {
 const TRACEDATA_DIR_PREFIX = "./tracedata/"
 
 func storeBlockResultsForTxs(ctx context.Context, client *ethclient.Client, path, file string, txs ...*types.Transaction) error {
+	return checkTxsReceiptStatus(ctx, client, file, txs...)
+
 	numberList, err := getTxsBlockNumbers(ctx, client, file, txs...)
 	if err != nil {
 		return err
 	}
 
 	return storeBlockResultsForBlocks(ctx, client, path, file, numberList)
+}
+
+func checkTxsReceiptStatus(ctx context.Context, client *ethclient.Client, file string, txs ...*types.Transaction) error {
+	// Wait tx mined.
+	for _, tx := range txs {
+		receipt, err := bind.WaitMined(ctx, client, tx)
+		if err != nil {
+			return err
+		}
+		if receipt.Status != types.ReceiptStatusSuccessful {
+			return fmt.Errorf("receipt status is fail. receipt.BlockNumber.Uint64(): %d, txhash: %s", receipt.BlockNumber.Uint64(), tx.Hash())
+		}
+	}
+	return nil
 }
 
 func getTxsBlockNumbers(ctx context.Context, client *ethclient.Client, file string, txs ...*types.Transaction) ([]*big.Int, error) {
@@ -76,6 +92,9 @@ func getTxsBlockNumbers(ctx context.Context, client *ethclient.Client, file stri
 }
 
 func storeBlockResultsForBlocks(ctx context.Context, client *ethclient.Client, path, file string, numberList []*big.Int) error {
+	// don't store BlockResults any more
+	return nil
+
 	for _, number := range numberList {
 		trace, err := client.GetBlockTraceByNumber(ctx, number)
 		if err != nil {
