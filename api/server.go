@@ -41,5 +41,6 @@ const (
 	MulticallName      = SolType("multicall")
 
 	// ecc contracts
-	EccName      = SolType("ecc")
+	EcAddName      = SolType("ecAdd")
+	EcMulName      = SolType("ecMul")
 )

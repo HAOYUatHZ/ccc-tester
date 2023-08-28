@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"math"
 	"math/big"
@@ -607,7 +608,7 @@ func NewMultiUniswapv2(ctx context.Context, client *ethclient.Client, root, auth
 	return storeBlockResultsForTxs(ctx, client, path, "router-swapExactTokensForTokens", txs...)
 }
 
-func NewEcc(ctx context.Context, client *ethclient.Client, root, auth *bind.TransactOpts, times int64) error {
+func NewEcc(ctx context.Context, client *ethclient.Client, root, auth *bind.TransactOpts, action string, times int64) error {
 	log.Info("deploying contracts")
 	_, tx, impl, err := ecc.DeployEcc(root, client)
 	if err != nil {
@@ -619,10 +620,21 @@ func NewEcc(ctx context.Context, client *ethclient.Client, root, auth *bind.Tran
 		return err
 	}
 
-	log.Info("calling contracts", "times-in-a-call", times)
-	tx, err = impl.EcAdds(root, big.NewInt(times))
-	if err != nil {
-		return err
+	log.Info("calling contracts", "action", action, "times-in-a-call", times)
+	
+	switch action {
+	case "add":
+		tx, err = impl.EcAdds(root, big.NewInt(times))
+		if err != nil {
+			return err
+		}
+	case "mul":
+		tx, err = impl.EcMuls(root, big.NewInt(times))
+		if err != nil {
+			return err
+		}
+	default:
+		return errors.New("unimplemented")
 	}
-	return storeBlockResultsForTxs(ctx, client, path, "do", tx)
+	return storeBlockResultsForTxs(ctx, client, path, action, tx)
 }
