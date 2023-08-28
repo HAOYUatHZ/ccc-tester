@@ -28,3 +28,6 @@ trace_data:
 	./bin/trace_dumper -dump dao
 	./bin/trace_dumper -dump uniswapv2
 	./bin/trace_dumper -dump multi_uniswapv2
+
+abigen_ecc:
+	abigen --sol contracts/ecc/ecc.sol --pkg ecc --out contracts/ecc/ecc.go
