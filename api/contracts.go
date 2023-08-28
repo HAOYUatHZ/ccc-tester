@@ -62,6 +62,7 @@ func checkTxsReceiptStatus(ctx context.Context, client *ethclient.Client, file s
 		if receipt.Status != types.ReceiptStatusSuccessful {
 			return fmt.Errorf("receipt status is fail. receipt.BlockNumber.Uint64(): %d, txhash: %s", receipt.BlockNumber.Uint64(), tx.Hash())
 		}
+		log.Info("done", "action", file, "block", receipt.BlockNumber.Uint64(), "tx", tx.Hash().String())
 	}
 	return nil
 }
