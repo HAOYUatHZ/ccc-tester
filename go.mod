@@ -5,7 +5,7 @@ go 1.19
 require (
 	github.com/mattn/go-colorable v0.1.8
 	github.com/mattn/go-isatty v0.0.12
-	github.com/scroll-tech/go-ethereum v1.10.14-0.20230824161545-b0657a7e4531
+	github.com/scroll-tech/go-ethereum v1.10.14-0.20230826160804-d650299a36d8
 )
 
 require (
