@@ -1,6 +1,6 @@
 FROM scrolltech/l2geth:scroll-v4.3.54
 
-ENV RUST_LOG="debug"
+ENV RUST_LOG="info"
 
 RUN mkdir -p /l2geth/keystore
 

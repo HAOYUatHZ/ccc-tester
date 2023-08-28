@@ -19,6 +19,7 @@ import (
 	"tool/accounts"
 	"tool/contracts/dao"
 	"tool/contracts/erc20"
+	"tool/contracts/ecc"
 	"tool/contracts/greeter"
 	"tool/contracts/nft"
 	"tool/contracts/sushi"
@@ -604,4 +605,24 @@ func NewMultiUniswapv2(ctx context.Context, client *ethclient.Client, root, auth
 	}
 
 	return storeBlockResultsForTxs(ctx, client, path, "router-swapExactTokensForTokens", txs...)
+}
+
+func NewEcc(ctx context.Context, client *ethclient.Client, root, auth *bind.TransactOpts, times int64) error {
+	log.Info("deploying contracts")
+	_, tx, impl, err := ecc.DeployEcc(root, client)
+	if err != nil {
+		return err
+	}
+
+	path := TRACEDATA_DIR_PREFIX + "ecc/"
+	if err = storeBlockResultsForTxs(ctx, client, path, "deploy", tx); err != nil {
+		return err
+	}
+
+	log.Info("calling contracts", "times-in-a-call", times)
+	tx, err = impl.EcAdds(root, big.NewInt(times))
+	if err != nil {
+		return err
+	}
+	return storeBlockResultsForTxs(ctx, client, path, "do", tx)
 }

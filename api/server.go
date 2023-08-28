@@ -39,4 +39,7 @@ const (
 	FactoryName        = SolType("factory")
 	RouterName         = SolType("router")
 	MulticallName      = SolType("multicall")
+
+	// ecc contracts
+	EccName      = SolType("ecc")
 )
