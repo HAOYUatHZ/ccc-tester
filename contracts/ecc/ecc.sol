@@ -35,39 +35,38 @@ contract Ecc {
         }
     }
 
-    // https://github.com/tornadocash/tornado-core/blob/master/contracts/Verifier.sol#L79
-    function ecPairing(
-        uint256[2] memory a1,
-        uint256[2][2] memory a2,
-        uint256[2] memory b1,
-        uint256[2][2] memory b2
-    ) public view
-        returns (bool)
-    {
-        uint256[2][2] memory p1 = [a1, b1];
-        uint256[2][2][2] memory p2 = [a2, b2];
-
-        uint256 inputSize = 2*6;
-        uint256[] memory input = new uint256[](inputSize);
-        for (uint256 i = 0; i < 2; i++) {
-            uint256 j = i * 6;
-            input[j + 0] = p1[i][0];
-            input[j + 1] = p1[i][1];
-            input[j + 2] = p2[i][0][0];
-            input[j + 3] = p2[i][0][1];
-            input[j + 4] = p2[i][1][0];
-            input[j + 5] = p2[i][1][1];
-        }
-
-        uint256[1] memory out;
-        assembly {
-            if iszero(staticcall(not(0), 0x08, add(input, 0x20), mul(inputSize, 0x20), out, 0x20)) {
-                revert(0, 0)
-            }
-        }
-        return out[0] != 0;
+    // scroll-tech/scroll/contracts/src/libraries/verifier/RollupVerifier.sol
+    struct G1Point {
+        uint256 x;
+        uint256 y;
     }
+    struct G2Point {
+        uint256[2] x;
+        uint256[2] y;
+    }
+    function ecPairing(G1Point[] memory p1, G2Point[] memory p2) internal view returns (bool) {
+        uint256 length = p1.length * 6;
+        uint256[] memory input = new uint256[](length);
+        uint256[1] memory result;
+        bool ret;
 
+        require(p1.length == p2.length);
+
+        for (uint256 i = 0; i < p1.length; i++) {
+            input[0 + i * 6] = p1[i].x;
+            input[1 + i * 6] = p1[i].y;
+            input[2 + i * 6] = p2[i].x[0];
+            input[3 + i * 6] = p2[i].x[1];
+            input[4 + i * 6] = p2[i].y[0];
+            input[5 + i * 6] = p2[i].y[1];
+        }
+
+        assembly {
+            ret := staticcall(gas(), 8, add(input, 0x20), mul(length, 0x20), result, 0x20)
+        }
+        require(ret);
+        return result[0] != 0;
+    }
 
     /* Bench */
     function ecAdds(uint256 n) public
@@ -97,27 +96,26 @@ contract Ecc {
 
     function ecPairings(uint256 n) public
     {
-        uint256[2] memory a1;
-        uint256[2][2] memory a2;
-        uint256[2] memory b1;
-        uint256[2][2] memory b2;
-
-        a1[0] = 0x0000000000000000000000000000000000000000000000000000000000000001;
-        a1[1] = 0x0000000000000000000000000000000000000000000000000000000000000002;
-        a2[0][0] = 0x1800deef121f1e76426a00665e5c4479674322d4f75edadd46debd5cd992f6ed;
-        a2[0][1] = 0x198e9393920d483a7260bfb731fb5d25f1aa493335a9e71297e485b7aef312c2;
-        a2[1][0] = 0x12c85ea5db8c6deb4aab71808dcb408fe3d1e7690c43d37b4ce6cc0166fa7daa;
-        a2[1][1] = 0x090689d0585ff075ec9e99ad690c3395bc4b313370b38ef355acdadcd122975b;
-
-        b1[0] = 0x1aa125a22bd902874034e67868aed40267e5575d5919677987e3bc6dd42a32fe;
-        b1[1] = 0x1bacc186725464068956d9a191455c2d6f6db282d83645c610510d8d4efbaee0;
-        b2[0][0] = 0x1b7734c80605f71f1e2de61e998ce5854ff2abebb76537c3d67e50d71422a852;
-        b2[0][1] = 0x10d5a1e34b2388a5ebe266033a5e0e63c89084203784da0c6bd9b052a78a2cac;
-        b2[1][0] = 0x275739c5c2cdbc72e37c689e2ab441ea76c1d284b9c46ae8f5c42ead937819e1;
-        b2[1][1] = 0x018de34c5b7c3d3d75428bbe050f1449ea3d9961d563291f307a1874f7332e65;
+        G1Point[] memory g1_points = new G1Point[](2);
+        G2Point[] memory g2_points = new G2Point[](2);
+        g1_points[0].x = 0x0000000000000000000000000000000000000000000000000000000000000001;
+        g1_points[0].y = 0x0000000000000000000000000000000000000000000000000000000000000002;
+        g2_points[0].x[0] = 0x1800deef121f1e76426a00665e5c4479674322d4f75edadd46debd5cd992f6ed;
+        g2_points[0].x[1] = 0x198e9393920d483a7260bfb731fb5d25f1aa493335a9e71297e485b7aef312c2;
+        g2_points[0].y[0] = 0x12c85ea5db8c6deb4aab71808dcb408fe3d1e7690c43d37b4ce6cc0166fa7daa;
+        g2_points[0].y[1] = 0x090689d0585ff075ec9e99ad690c3395bc4b313370b38ef355acdadcd122975b;
+        g1_points[1].x = 0x1aa125a22bd902874034e67868aed40267e5575d5919677987e3bc6dd42a32fe;
+        g1_points[1].y = 0x1bacc186725464068956d9a191455c2d6f6db282d83645c610510d8d4efbaee0;
+        g2_points[1].x[0] = 0x1b7734c80605f71f1e2de61e998ce5854ff2abebb76537c3d67e50d71422a852;
+        g2_points[1].x[1] = 0x10d5a1e34b2388a5ebe266033a5e0e63c89084203784da0c6bd9b052a78a2cac;
+        g2_points[0].y[0] = 0x275739c5c2cdbc72e37c689e2ab441ea76c1d284b9c46ae8f5c42ead937819e1;
+        g2_points[0].y[1] = 0x018de34c5b7c3d3d75428bbe050f1449ea3d9961d563291f307a1874f7332e65;
 
         for (uint i = 0; i < n; i++) {
-            ecPairing(a1, a2, b1, b2);
+            ecPairing(g1_points, g2_points);
+            // bool checked = false;
+            // checked = ecPairing(g1_points, g2_points);
+            // require(checked);
         }
     }
 }
