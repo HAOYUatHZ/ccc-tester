@@ -82,6 +82,8 @@ func main() {
 		err = api.NewEcc(ctx, client, root, auth, "add", *times)
 	case api.EcMulName:
 		err = api.NewEcc(ctx, client, root, auth, "mul", *times)
+	case api.EcPairingName:
+		err = api.NewEcc(ctx, client, root, auth, "pairing", *times)
 	case api.Sha256Name:
 		err = api.NewHash(ctx, client, root, auth, "sha256", *times)
 	case api.Keccak256Name:

@@ -634,6 +634,11 @@ func NewEcc(ctx context.Context, client *ethclient.Client, root, auth *bind.Tran
 		if err != nil {
 			return err
 		}
+	case "pairing":
+		tx, err = impl.EcPairings(root, big.NewInt(times))
+		if err != nil {
+			return err
+		}
 	default:
 		return errors.New("unimplemented")
 	}
