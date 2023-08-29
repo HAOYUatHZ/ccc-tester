@@ -82,6 +82,8 @@ func main() {
 		err = api.NewEcc(ctx, client, root, auth, "add", *times)
 	case api.EcMulName:
 		err = api.NewEcc(ctx, client, root, auth, "mul", *times)
+	case api.Sha256Name:
+		err = api.NewSha256(ctx, client, root, auth, *times)
 	default:
 		log.Error("unexpected dump option")
 		return
