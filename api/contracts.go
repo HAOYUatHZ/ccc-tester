@@ -661,6 +661,11 @@ func NewHash(ctx context.Context, client *ethclient.Client, root, auth *bind.Tra
 		if err != nil {
 			return err
 		}
+	case "keccak256":
+		tx, err = impl.Keccak256s(root, big.NewInt(times))
+		if err != nil {
+			return err
+		}
 	default:
 		return errors.New("unimplemented")
 	}

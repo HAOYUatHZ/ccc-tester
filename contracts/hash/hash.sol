@@ -28,4 +28,11 @@ contract Hash {
             sha256(input);
         }
     }
+    function keccak256s(uint256 n) public
+    {
+        bytes memory input = abi.encode(999);
+        for (uint i = 0; i < n; i++) {
+            keccak256(input);
+        }
+    }
 }
