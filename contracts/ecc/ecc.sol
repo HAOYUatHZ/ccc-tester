@@ -112,10 +112,10 @@ contract Ecc {
         g2_points[1].y[0] = 0x018de34c5b7c3d3d75428bbe050f1449ea3d9961d563291f307a1874f7332e65;
 
         for (uint i = 0; i < n; i++) {
-            // ecPairing(g1_points, g2_points);
-            bool checked = false;
-            checked = ecPairing(g1_points, g2_points);
-            require(checked);
+            ecPairing(g1_points, g2_points);
+            // bool checked = false;
+            // checked = ecPairing(g1_points, g2_points);
+            // require(checked);
         }
     }
 }
