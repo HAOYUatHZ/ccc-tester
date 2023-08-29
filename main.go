@@ -84,6 +84,8 @@ func main() {
 		err = api.NewEcc(ctx, client, root, auth, "mul", *times)
 	case api.Sha256Name:
 		err = api.NewHash(ctx, client, root, auth, "sha256", *times)
+	case api.KeccackName:
+		err = api.NewHash(ctx, client, root, auth, "keccack", *times)
 	default:
 		log.Error("unexpected dump option")
 		return

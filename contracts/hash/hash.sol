@@ -9,6 +9,17 @@ contract Hash {
         (bool ok, bytes memory out) = address(2).staticcall(input);
         require(ok);
     }
+    function sha256Yul(bytes memory input) public view
+        returns (bytes memory out)
+    {        
+        assembly {
+            // mstore(0, input)
+            if iszero(staticcall(gas(), 2, 0, 32, 0, 32)) {
+                revert(0,0)
+            }
+            // return(0, 32)
+        }
+    }
 
     function sha256s(uint256 n) public
     {
