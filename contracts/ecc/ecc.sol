@@ -100,22 +100,22 @@ contract Ecc {
         G2Point[] memory g2_points = new G2Point[](2);
         g1_points[0].x = 0x0000000000000000000000000000000000000000000000000000000000000001;
         g1_points[0].y = 0x0000000000000000000000000000000000000000000000000000000000000002;
-        g2_points[0].x[0] = 0x1800deef121f1e76426a00665e5c4479674322d4f75edadd46debd5cd992f6ed;
-        g2_points[0].x[1] = 0x198e9393920d483a7260bfb731fb5d25f1aa493335a9e71297e485b7aef312c2;
-        g2_points[0].y[0] = 0x12c85ea5db8c6deb4aab71808dcb408fe3d1e7690c43d37b4ce6cc0166fa7daa;
-        g2_points[0].y[1] = 0x090689d0585ff075ec9e99ad690c3395bc4b313370b38ef355acdadcd122975b;
+        g2_points[0].x[1] = 0x1800deef121f1e76426a00665e5c4479674322d4f75edadd46debd5cd992f6ed;
+        g2_points[0].x[0] = 0x198e9393920d483a7260bfb731fb5d25f1aa493335a9e71297e485b7aef312c2;
+        g2_points[0].y[1] = 0x12c85ea5db8c6deb4aab71808dcb408fe3d1e7690c43d37b4ce6cc0166fa7daa;
+        g2_points[0].y[0] = 0x090689d0585ff075ec9e99ad690c3395bc4b313370b38ef355acdadcd122975b;
         g1_points[1].x = 0x1aa125a22bd902874034e67868aed40267e5575d5919677987e3bc6dd42a32fe;
         g1_points[1].y = 0x1bacc186725464068956d9a191455c2d6f6db282d83645c610510d8d4efbaee0;
-        g2_points[1].x[0] = 0x1b7734c80605f71f1e2de61e998ce5854ff2abebb76537c3d67e50d71422a852;
-        g2_points[1].x[1] = 0x10d5a1e34b2388a5ebe266033a5e0e63c89084203784da0c6bd9b052a78a2cac;
-        g2_points[0].y[0] = 0x275739c5c2cdbc72e37c689e2ab441ea76c1d284b9c46ae8f5c42ead937819e1;
-        g2_points[0].y[1] = 0x018de34c5b7c3d3d75428bbe050f1449ea3d9961d563291f307a1874f7332e65;
+        g2_points[1].x[1] = 0x1b7734c80605f71f1e2de61e998ce5854ff2abebb76537c3d67e50d71422a852;
+        g2_points[1].x[0] = 0x10d5a1e34b2388a5ebe266033a5e0e63c89084203784da0c6bd9b052a78a2cac;
+        g2_points[1].y[1] = 0x275739c5c2cdbc72e37c689e2ab441ea76c1d284b9c46ae8f5c42ead937819e1;
+        g2_points[1].y[0] = 0x018de34c5b7c3d3d75428bbe050f1449ea3d9961d563291f307a1874f7332e65;
 
         for (uint i = 0; i < n; i++) {
-            ecPairing(g1_points, g2_points);
-            // bool checked = false;
-            // checked = ecPairing(g1_points, g2_points);
-            // require(checked);
+            // ecPairing(g1_points, g2_points);
+            bool checked = false;
+            checked = ecPairing(g1_points, g2_points);
+            require(checked);
         }
     }
 }
