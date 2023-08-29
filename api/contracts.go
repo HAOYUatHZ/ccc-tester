@@ -23,7 +23,7 @@ import (
 	"tool/contracts/ecc"
 	"tool/contracts/greeter"
 	"tool/contracts/nft"
-	"tool/contracts/sha256"
+	"tool/contracts/hash"
 	"tool/contracts/sushi"
 	"tool/contracts/uniswap/factory"
 	"tool/contracts/uniswap/router"
@@ -640,24 +640,30 @@ func NewEcc(ctx context.Context, client *ethclient.Client, root, auth *bind.Tran
 	return storeBlockResultsForTxs(ctx, client, path, action, tx)
 }
 
-func NewSha256(ctx context.Context, client *ethclient.Client, root, auth *bind.TransactOpts, times int64) error {
+func NewHash(ctx context.Context, client *ethclient.Client, root, auth *bind.TransactOpts, action string, times int64) error {
 	log.Info("deploying contracts")
-	_, tx, impl, err := sha256.DeploySha256(root, client)
+	_, tx, impl, err := hash.DeployHash(root, client)
 	if err != nil {
 		return err
 	}
 
-	path := TRACEDATA_DIR_PREFIX + "sha256/"
+	path := TRACEDATA_DIR_PREFIX + "hash/"
 	if err = storeBlockResultsForTxs(ctx, client, path, "deploy", tx); err != nil {
 		return err
 	}
 
-	log.Info("calling contracts", "action", "sha256", "times-in-a-call", times)
+	log.Info("calling contracts", "action", action, "times-in-a-call", times)
 	
-	tx, err = impl.Sha256s(root, big.NewInt(times))
-	if err != nil {
-		return err
+	
+	switch action {
+	case "sha256":
+		tx, err = impl.Sha256s(root, big.NewInt(times))
+		if err != nil {
+			return err
+		}
+	default:
+		return errors.New("unimplemented")
 	}
 
-	return storeBlockResultsForTxs(ctx, client, path, "sha256", tx)
+	return storeBlockResultsForTxs(ctx, client, path, action, tx)
 }

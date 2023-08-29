@@ -2,7 +2,7 @@
 
 pragma solidity >=0.7.0 <0.9.0;
 
-contract Sha256 {
+contract Hash {
     function sha256(bytes memory input) public view
         returns (bytes memory out)
     {        
