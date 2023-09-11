@@ -32,3 +32,4 @@ trace_data:
 abigen_precompiles:
 	abigen --sol contracts/ecc/ecc.sol --pkg ecc --out contracts/ecc/ecc.go
 	abigen --sol contracts/hash/hash.sol --pkg hash --out contracts/hash/hash.go
+	abigen --sol contracts/modexp/modexp.sol --pkg modexp --out contracts/modexp/modexp.go

@@ -48,4 +48,7 @@ const (
 	// hash contracts
 	Sha256Name    = SolType("sha256")
 	Keccak256Name = SolType("keccak256")
+
+	// modexp contracts
+	ModExpName    = SolType("modexp")
 )

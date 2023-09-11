@@ -25,6 +25,7 @@ import (
 	"tool/contracts/hash"
 	"tool/contracts/nft"
 	"tool/contracts/sushi"
+	"tool/contracts/modexp"
 	"tool/contracts/uniswap/factory"
 	"tool/contracts/uniswap/router"
 	"tool/contracts/uniswap/weth9"
@@ -557,4 +558,29 @@ func NewHash(ctx context.Context, client *ethclient.Client, root, auth *bind.Tra
 		txs = append(txs, tx)
 	}
 	return storeBlockResultsForTxs(ctx, client, path, action, txs...)
+}
+
+func NewModExp(ctx context.Context, client *ethclient.Client, root, auth *bind.TransactOpts, timesInner, timesOuter int64) error {
+	log.Info("deploying contracts")
+	_, tx, impl, err := modexp.DeployModExp(root, client)
+	if err != nil {
+		return err
+	}
+
+	path := TRACEDATA_DIR_PREFIX + "modexp/"
+	if err = storeBlockResultsForTxs(ctx, client, path, "deploy", tx); err != nil {
+		return err
+	}
+
+	log.Info("calling contracts", "action", "modexp", "times-in-a-call", timesInner, "times-of-calls", timesOuter)
+	var txs = make([]*types.Transaction, 0, timesOuter)
+	for i := int64(0); i < timesOuter; i++ {
+		tx, err = impl.Modexps(root, big.NewInt(timesInner))
+		log.Info("sending", "i", i+1, "total", timesOuter, "txHash", tx.Hash().String())
+		if err != nil {
+			return err
+		}
+		txs = append(txs, tx)
+	}
+	return storeBlockResultsForTxs(ctx, client, path, "modexp", txs...)
 }
