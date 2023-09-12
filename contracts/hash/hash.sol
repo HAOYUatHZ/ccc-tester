@@ -30,9 +30,10 @@ contract Hash {
     }
     function keccak256s(uint256 n) public
     {
-        bytes memory input = abi.encode(999);
+        bytes32[] memory output = new bytes32[](n);
         for (uint i = 0; i < n; i++) {
-            keccak256(input);
+            bytes memory input = abi.encode(i);
+            output[i] = keccak256(input);
         }
     }
 }
