@@ -165,7 +165,7 @@ func NewERC20(ctx context.Context, client *ethclient.Client, root, auth *bind.Tr
 		return err
 	}
 
-	originVal := big.NewInt(1).Mul(big.NewInt(3e3), utils.Ether)
+	originVal := big.NewInt(1).Mul(big.NewInt(3e4), utils.Ether)
 	tx, err = erc20Token.Mint(root, root.From, originVal)
 	if err != nil {
 		return err
@@ -177,7 +177,7 @@ func NewERC20(ctx context.Context, client *ethclient.Client, root, auth *bind.Tr
 	// erc20 transfers
 	var txs = make([]*types.Transaction, 0, times)
 	for i := int64(0); i < times; i++ {
-		tx, err = erc20Token.Transfer(root, auth.From, big.NewInt(1000))
+		tx, err = erc20Token.Transfer(root, auth.From, big.NewInt(100))
 		if err != nil {
 			return err
 		}
