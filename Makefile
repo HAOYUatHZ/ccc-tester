@@ -1,6 +1,6 @@
 .PHONY: update trace_dumper geth clean docker start_docker trace_data
 
-VERSION=scroll-v4.4.2
+VERSION=scroll-v5.0.2
 
 update: ## Let's keep it and docker version in consistent.
 	go get -u github.com/scroll-tech/go-ethereum@${VERSION}
@@ -8,7 +8,7 @@ update: ## Let's keep it and docker version in consistent.
 
 trace_dumper: ## Builds the trace_dumper instance.
 	mkdir -p ${PWD}/bin
-	go build -o ${PWD}/bin/trace_dumper
+	CGO_ENABLED=0 go build -o ${PWD}/bin/trace_dumper
 
 clean: ## Delete generated artifacts
 	rm -rf ${PWD}/bin/*  ${PWD}/tracedata/*
