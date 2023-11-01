@@ -155,6 +155,9 @@ func Native(ctx context.Context, client *ethclient.Client, root *bind.TransactOp
 }
 
 func NewERC20(ctx context.Context, client *ethclient.Client, root, auth *bind.TransactOpts, times int64) error {
+	root.GasLimit = 5000000
+	auth.GasLimit = 5000000
+
 	_, tx, erc20Token, err := erc20.DeployERC20Template(root, client, root.From, root.From, "CCC coin", "CCCC", 18)
 	if err != nil {
 		return err
