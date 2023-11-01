@@ -154,8 +154,8 @@ func Native(ctx context.Context, client *ethclient.Client, root *bind.TransactOp
 	return storeBlockResultsForTxs(ctx, client, TRACEDATA_DIR_PREFIX+"native/", "transfer", tx)
 }
 
-func NewERC20(ctx context.Context, client *ethclient.Client, root, auth *bind.TransactOpts) error {
-	_, tx, erc20Token, err := erc20.DeployERC20Template(root, client, root.From, root.From, "WETH coin", "WETH", 18)
+func NewERC20(ctx context.Context, client *ethclient.Client, root, auth *bind.TransactOpts, times int64) error {
+	_, tx, erc20Token, err := erc20.DeployERC20Template(root, client, root.From, root.From, "CCC coin", "CCCC", 18)
 	if err != nil {
 		return err
 	}
@@ -174,18 +174,9 @@ func NewERC20(ctx context.Context, client *ethclient.Client, root, auth *bind.Tr
 		return err
 	}
 
-	// erc20 transfer
-	tx, err = erc20Token.Transfer(root, auth.From, big.NewInt(1000))
-	if err != nil {
-		return err
-	}
-	if err = storeBlockResultsForTxs(ctx, client, path, "1_transfer", tx); err != nil {
-		return err
-	}
-
-	var txs = make([]*types.Transaction, 0, 10)
-	for i := 0; i < 10; i++ {
-		// erc20 transfer
+	// erc20 transfers
+	var txs = make([]*types.Transaction, 0, times)
+	for i := int64(0); i < times; i++ {
 		tx, err = erc20Token.Transfer(root, auth.From, big.NewInt(1000))
 		if err != nil {
 			return err
@@ -193,7 +184,7 @@ func NewERC20(ctx context.Context, client *ethclient.Client, root, auth *bind.Tr
 		txs = append(txs, tx)
 	}
 
-	return storeBlockResultsForTxs(ctx, client, path, "10_transfer", txs...)
+	return storeBlockResultsForTxs(ctx, client, path, "transfer", txs...)
 }
 
 func NewGreeter(ctx context.Context, client *ethclient.Client, root *bind.TransactOpts) error {

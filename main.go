@@ -66,7 +66,7 @@ func main() {
 	case api.NativeName:
 		err = api.Native(ctx, client, root, auth.From, big.NewInt(100))
 	case api.ERC20Name:
-		err = api.NewERC20(ctx, client, root, auth)
+		err = api.NewERC20(ctx, client, root, auth, *timesOuter)
 	case api.NftName:
 		err = api.NewNft(ctx, client, root, auth)
 	case api.GreeterName:
